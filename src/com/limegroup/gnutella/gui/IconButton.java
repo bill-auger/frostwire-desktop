@@ -16,25 +16,25 @@ import com.limegroup.gnutella.settings.UISettings;
  * A JButton that uses an Icon.
  */
 public class IconButton extends JButton {
-    
+
     private String message;
     private String iconName;
     private String rollOverIconName;
     private boolean horizontalText;
     private boolean useTransparentBackground;
-    
+
 	/**
 	 * The super constructors of JButton call {@link #updateUI()} before we
-	 * had a chance to set our values. So ignore these calls in 
+	 * had a chance to set our values. So ignore these calls in
 	 * {@link #updateButton()}.
 	 */
     private boolean initialized;
-	
+
 	private PropertyChangeListener listener = null;
     private boolean iconOnly;
-    
+
     /**
-     * 
+     *
      * @param text
      * @param iconName
      * @param horizontalTextPlacement - if true, text will be displayed to the right of the icon.
@@ -44,12 +44,12 @@ public class IconButton extends JButton {
         horizontalText = horizontalTextPlacement;
         useTransparentBackground = true;
     }
-    
+
     /**
      * Constructs a new IconButton with the given text & icon name.
      */
     public IconButton(String text, String iconName) {
-	    setRolloverEnabled(true);        
+	    setRolloverEnabled(true);
         this.iconName = iconName;
         this.message = text;
         initialized = true;
@@ -61,7 +61,7 @@ public class IconButton extends JButton {
      * Constructs a new IconButton with the an icon only.
      */
     public IconButton(String iconName) {
-        setRolloverEnabled(true);        
+        setRolloverEnabled(true);
         this.iconName = iconName;
         this.message = "";
         this.iconOnly = true;
@@ -86,7 +86,28 @@ public class IconButton extends JButton {
 		useTransparentBackground = true;
 		updateButton();
 	}
-	
+
+	/**
+	 * Constructs a transparent or opaque IconButton for an action.
+	 * <p>
+	 * Actions must provide a value for the key {@link LimeAction#ICON_NAME}
+	 * and can provide a short name which is shown below the icon with
+	 * {@link LimeAction#SHORT_NAME}. If the short name is not provided it'll
+	 * fall back on {@link Action#NAME}.
+	 *
+	 * If hasTransparentBackground is false, creates a standard opaque button
+	 * or else is equivalent to the one argument form.
+	 * @param action
+	 * @param hasTransparentBackground
+	 */
+	public IconButton(Action action, Boolean hasTransparentBackground) {
+		super(action);
+		setRolloverEnabled(true);
+		initialized = true;
+		useTransparentBackground = hasTransparentBackground;
+		updateButton();
+	}
+
 	/**
 	 * Overridden for internal reasons, no API changes.
 	 */
@@ -99,16 +120,16 @@ public class IconButton extends JButton {
 		setButtonFromAction(a);
 		a.addPropertyChangeListener(getListener());
 	}
-	
+
 	public void setHorizontalText(boolean useHorizontalText) {
 	    horizontalText = useHorizontalText;
 	}
-	
+
     public void setUseTransparentBackground(boolean transparentBackground) {
         useTransparentBackground = transparentBackground;
     }
 
-	
+
     private void setButtonFromAction(Action action) {
 		iconName = (String)action.getValue(LimeAction.ICON_NAME);
 		rollOverIconName = (String)action.getValue(LimeAction.ICON_NAME_ROLLOVER);
@@ -119,7 +140,7 @@ public class IconButton extends JButton {
 		}
 		updateButton();
 	}
-	
+
 	private PropertyChangeListener getListener() {
 		if (listener == null) {
 			listener = new PropertyChangeListener() {
@@ -127,7 +148,7 @@ public class IconButton extends JButton {
 				public void propertyChange(PropertyChangeEvent evt) {
 					setButtonFromAction((Action)evt.getSource());
 				}
-				
+
 			};
 		}
 		return listener;
@@ -140,7 +161,7 @@ public class IconButton extends JButton {
         super.updateUI();
         updateButton();
     }
-    
+
     /**
      * Updates the text of the icon.
      */
@@ -148,35 +169,35 @@ public class IconButton extends JButton {
         message = text;
         updateButton();
     }
-    
+
     /**
      * Updates the button.
      */
     private void updateButton() {
-       if (!initialized) 
+       if (!initialized)
 		   return;
-        
+
         Icon icon = IconManager.instance().getIconForButton(iconName);
-                
+
         if (icon == null) {
             super.setText(message);
-            
+
             setVerticalTextPosition(SwingConstants.CENTER);
             setHorizontalTextPosition(SwingConstants.CENTER);
-            
+
             setContentAreaFilled(true);
             setBorderPainted(true);
             setOpaque(true);
-            
+
         } else {
             setIcon(icon);
-            
+
             Icon rollover = IconManager.instance().getIconForButton(rollOverIconName);
             if (rollover == null) {
                 rollover = IconManager.instance().getRolloverIconForButton(iconName);
             }
             setRolloverIcon(rollover);
-            
+
             if (!horizontalText) {
                 setVerticalTextPosition(SwingConstants.BOTTOM);
                 setHorizontalTextPosition(SwingConstants.CENTER);
@@ -194,10 +215,10 @@ public class IconButton extends JButton {
                 setOpaque(false);
                 setContentAreaFilled(true);
             }
-            
-            if (!iconOnly && 
-                UISettings.TEXT_WITH_ICONS.getValue() && 
-                message != null && 
+
+            if (!iconOnly &&
+                UISettings.TEXT_WITH_ICONS.getValue() &&
+                message != null &&
                 message.length() > 0) {
                 super.setText(message);
                 setPreferredSize(null);
@@ -213,5 +234,5 @@ public class IconButton extends JButton {
             }
         }
     }
-    
+
 }

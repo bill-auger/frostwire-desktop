@@ -1,7 +1,7 @@
 /*
  * Created by Angel Leon (@gubatron), Alden Torres (aldenml)
  * Copyright (c) 2011-2014, FrostWire(R). All rights reserved.
- 
+
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -26,8 +26,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.Action;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
@@ -39,10 +41,15 @@ import net.miginfocom.swing.MigLayout;
 import org.limewire.setting.BooleanSetting;
 
 import com.limegroup.gnutella.gui.I18n;
+import com.limegroup.gnutella.gui.IconButton;
 import com.limegroup.gnutella.gui.LabeledTextField;
+import com.limegroup.gnutella.gui.actions.LimeAction;
+import com.limegroup.gnutella.gui.options.ConfigureOptionsAction;
+import com.limegroup.gnutella.gui.options.OptionsConstructor;
+
 
 /**
- * 
+ *
  * @author gubatron
  * @author aldenml
  *
@@ -55,14 +62,14 @@ final class SearchOptionsPanel extends JPanel {
     private final LabeledRangeSlider sliderSize;
     private final LabeledRangeSlider sliderSeeds;
     private final Map<SearchEngine,JCheckBox> engineCheckboxes;
-    
+
     private GeneralResultFilter generalFilter;
 
     public SearchOptionsPanel(SearchResultMediator resultPanel) {
         this.resultPanel = resultPanel;
 
         engineCheckboxes = new HashMap<SearchEngine, JCheckBox>();
-        
+
         setLayout(new MigLayout("insets 0, fillx"));
 
         this.textFieldKeywords = createNameFilter();
@@ -70,18 +77,19 @@ final class SearchOptionsPanel extends JPanel {
 
         add(new JSeparator(SwingConstants.HORIZONTAL), "growx, wrap");
 
+        add(createSearchEnginesHeader(), "growx, wrap");
         add(createSearchEnginesFilter(), "wrap");
-        
+
         add(new JSeparator(SwingConstants.HORIZONTAL), "growx, wrap");
 
         this.sliderSize = createSizeFilter();
         add(sliderSize, "gapx 3, wrap");
-        
+
         add(new JSeparator(SwingConstants.HORIZONTAL), "growx, wrap");
 
         this.sliderSeeds = createSeedsFilter();
         add(sliderSeeds, "gapx 3, wrap");
-        
+
         add(new JSeparator(SwingConstants.HORIZONTAL), "growx, wrap");
 
         resetFilters();
@@ -112,6 +120,22 @@ final class SearchOptionsPanel extends JPanel {
         textFieldKeywords.setText("");
     }
 
+    private JComponent createSearchEnginesHeader()
+    {
+        JPanel panel = new JPanel();
+        JLabel headerLabel = new JLabel(I18n.tr("Search Engines"));
+        Action optionsAction = new ConfigureOptionsAction(OptionsConstructor.SEARCH_KEY, "",
+                                                          I18n.tr("Search Options"),
+                                                          "SEARCH_OPTIONS");
+        IconButton iconButton = new IconButton(optionsAction, false);
+
+        panel.setLayout(new MigLayout("insets 0 3 0 6, fillx"));
+        panel.add(headerLabel, "align left");
+        panel.add(iconButton, "align right");
+
+        return panel;
+    }
+
     private JComponent createSearchEnginesFilter() {
         JPanel panel = new JPanel();
         panel.setLayout(new MigLayout("insets 3, wrap 2"));
@@ -125,7 +149,7 @@ final class SearchOptionsPanel extends JPanel {
 
     private LabeledTextField createNameFilter() {
         LabeledTextField textField = new LabeledTextField(I18n.tr("Name|Source|Ext."), 80, -1, 200);
-        
+
         textField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
@@ -189,16 +213,16 @@ final class SearchOptionsPanel extends JPanel {
             JCheckBox cBox = new JCheckBox(se.getName());
             cBox.setSelected(se.isEnabled());
             cBox.setEnabled(se.isEnabled());
-            
+
             if (!cBox.isEnabled()) {
                 cBox.setToolTipText(se.getName() + " " + I18n.tr("has been disabled on your FrostWire Search Options. (Go to Tools > Options > Search to enable)"));
             }
-            
+
             parent.add(cBox);
 
             cBoxes.put(cBox, se.getEnabledSetting());
             cBox.addItemListener(listener);
-            
+
             engineCheckboxes.put(se,cBox);
         }
     }

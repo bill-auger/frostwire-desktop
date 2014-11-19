@@ -86,7 +86,7 @@ import com.limegroup.gnutella.gui.util.BackgroundExecutorService;
 import com.limegroup.gnutella.settings.QuestionsHandler;
 
 /**
- * 
+ *
  * @author gubatron
  * @author aldenml
  *
@@ -180,7 +180,10 @@ public class LibraryPlaylists extends AbstractLibraryListPanel {
         }
 
         _popup.addSeparator();
-        _popup.add(new SkinMenuItem(new ConfigureOptionsAction(OptionsConstructor.LIBRARY_KEY, I18n.tr("Configure Options"), I18n.tr("You can configure the FrostWire\'s Options."))));
+        _popup.add(new SkinMenuItem(new ConfigureOptionsAction(OptionsConstructor.LIBRARY_KEY,
+                                                               I18n.tr("Configure Options"),
+                                                               I18n.tr("You can configure the FrostWire\'s Options."),
+                                                               "LIBRARY_SHARING_OPTIONS")));
     }
 
     private void setupModel() {
@@ -452,8 +455,8 @@ public class LibraryPlaylists extends AbstractLibraryListPanel {
      * the PlayList. Once we have done the heavy weight construction of the PlayListItem
      * list, the list is handed to the swing event queue to process adding the files to
      * the actual table model
-     * 
-     * 
+     *
+     *
      * @param selFile - file that we're reading from
      * @param path - path of file to open
      * @param overwrite - true if the table should be cleared of all entries prior to loading
@@ -509,7 +512,7 @@ public class LibraryPlaylists extends AbstractLibraryListPanel {
         }
 
         // if the file already exists and not the one just opened, ask if it should be
-        //  overwritten. 
+        //  overwritten.
         //TODO: this should be handled in the jfilechooser
         if (selFile.exists()) {
             DialogOption choice = GUIMediator.showYesNoMessage(I18n.tr("Warning: a file with the name {0} already exists in the folder. Overwrite this file?", selFile.getName()), QuestionsHandler.PLAYLIST_OVERWRITE_OK, DialogOption.NO);
@@ -532,7 +535,7 @@ public class LibraryPlaylists extends AbstractLibraryListPanel {
     }
 
     /**
-     * Handles actually copying and writing the playlist to disk. 
+     * Handles actually copying and writing the playlist to disk.
      * @param path - file location to save the list to
      */
     private void saveM3U(final Playlist playlist, final String path) {
@@ -691,7 +694,7 @@ public class LibraryPlaylists extends AbstractLibraryListPanel {
     private class RefreshAction extends AbstractAction {
 
         /**
-         * 
+         *
          */
         private static final long serialVersionUID = 3259221218056223423L;
 

@@ -131,7 +131,7 @@ abstract class AbstractLibraryTableMediator<T extends DataLineModel<E, I>, E ext
 
     /**
      * Convenience method to select an item at the given row.
-     * 
+     *
      * @param row
      * @return
      */
@@ -169,7 +169,10 @@ abstract class AbstractLibraryTableMediator<T extends DataLineModel<E, I>, E ext
     protected void buildListeners() {
         super.buildListeners();
         SEND_TO_FRIEND_ACTION = new SendToFriendAction();
-        OPTIONS_ACTION = new ConfigureOptionsAction(OptionsConstructor.LIBRARY_KEY, I18n.tr("Options"), I18n.tr("You can configure the folders you share in FrostWire\'s Options."));
+        OPTIONS_ACTION = new ConfigureOptionsAction(OptionsConstructor.LIBRARY_KEY,
+                                                    I18n.tr("Options"),
+                                                    I18n.tr("You can configure the folders you share in FrostWire\'s Options."),
+                                                    "LIBRARY_SHARING_OPTIONS");
     }
 
     protected SkinMenu createAddToPlaylistSubMenu() {
@@ -244,7 +247,7 @@ abstract class AbstractLibraryTableMediator<T extends DataLineModel<E, I>, E ext
             putValue(Action.LONG_DESCRIPTION, I18n.tr("Add to playlist") + " \"" + playlist.getName() + "\"");
             this.playlist = playlist;
         }
-        
+
         @Override
         public void actionPerformed(ActionEvent e) {
             LibraryUtils.asyncAddToPlaylist(playlist, getSelectedLines());
@@ -252,9 +255,9 @@ abstract class AbstractLibraryTableMediator<T extends DataLineModel<E, I>, E ext
     }
 
     public static String getTruncatedString(String string, int MAX_LENGTH) {
-        return string.length() > MAX_LENGTH ? (string.substring(0, MAX_LENGTH-1) + "...") : string;            
+        return string.length() > MAX_LENGTH ? (string.substring(0, MAX_LENGTH-1) + "...") : string;
     }
-    
+
     static class SendToFriendAction extends AbstractAction {
 
         private static final long serialVersionUID = 1329472129818371471L;

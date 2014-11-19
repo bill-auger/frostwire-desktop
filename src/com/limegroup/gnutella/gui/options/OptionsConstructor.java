@@ -90,14 +90,14 @@ import com.limegroup.gnutella.settings.UISettings;
  * The panes that show up when a leaf in the tree is selected are created
  * lazily in {@link OptionsPaneFactory}.
  * <p>
- * If you want to add a new {@link OptionsPane}, 
+ * If you want to add a new {@link OptionsPane},
  * add a call to {@link #addOption(String, String)} in the constructor here
- * and add the construction of the pane to 
+ * and add the construction of the pane to
  * {@link OptionsPaneFactory#createOptionsPane(String)}.
  */
 public final class OptionsConstructor {
     /**
-     * Handle to the top-level <tt>JDialog</tt window that contains all
+     * Handle to the top-level <tt>JDialog</tt> window that contains all
      * of the other GUI components.
      */
     private final JDialog DIALOG;
@@ -144,7 +144,7 @@ public final class OptionsConstructor {
     static final String POPUPS_KEY = "OPTIONS_POPUPS_MAIN_TITLE";
     static final String BUGS_KEY = "OPTIONS_BUGS_MAIN_TITLE";
     static final String APPS_KEY = "OPTIONS_APPS_MAIN_TITLE";
-    static final String SEARCH_KEY = "OPTIONS_SEARCH_MAIN_TITLE";
+    public static final String SEARCH_KEY = "OPTIONS_SEARCH_MAIN_TITLE";
     static final String SEARCH_LIMIT_KEY = "OPTIONS_SEARCH_LIMIT_MAIN_TITLE";
     static final String SEARCH_QUALITY_KEY = "OPTIONS_SEARCH_QUALITY_MAIN_TITLE";
     static final String SEARCH_SPEED_KEY = "OPTIONS_SEARCH_SPEED_MAIN_TITLE";
@@ -323,7 +323,7 @@ public final class OptionsConstructor {
         if (!OSUtils.isAnyMac()) {
             addOption(OptionsMediator.ROOT_NODE_KEY, SHUTDOWN_KEY, I18n.tr("System Tray"), ShutdownPaneItem.class);
         }
-        
+
         // debug
         addOption(OptionsMediator.ROOT_NODE_KEY, BUGS_KEY, I18n.tr("Bug Reports"), BugsPaneItem.class);
 
@@ -353,7 +353,7 @@ public final class OptionsConstructor {
      * Adds the specified key and <tt>OptionsPane</tt> to current set of
      * options. This adds this <tt>OptionsPane</tt> to the set of
      * <tt>OptionsPane</tt>s the user can select.
-     * 
+     *
      * @param parentKey the key of the parent node to add the new node to
      */
     private final OptionsTreeNode addOption(final String parentKey, final String childKey, final String label, @SuppressWarnings("unchecked") Class<? extends AbstractPaneItem>... clazzes) {
@@ -436,7 +436,7 @@ public final class OptionsConstructor {
     /**
      * Inner class that computes meaningful default dialog sizes for the options
      * dialog for different font size increments.
-     * 
+     *
      * It also updates the width and height setting if the user changes the dialog
      * size manually.
      */

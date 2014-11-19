@@ -69,7 +69,7 @@ import com.limegroup.gnutella.settings.SharingSettings;
 /**
  * @author gubatron
  * @author aldenml
- * 
+ *
  */
 public class LibraryExplorer extends AbstractLibraryListPanel {
 
@@ -133,7 +133,7 @@ public class LibraryExplorer extends AbstractLibraryListPanel {
         LibraryNode node = (LibraryNode) tree.getLastSelectedPathComponent();
 
         String searchPrompt = null;
-        
+
         if (node == null) {
             return;
         }
@@ -141,17 +141,17 @@ public class LibraryExplorer extends AbstractLibraryListPanel {
         if (node instanceof DeviceFileTypeTreeNode) {
             DeviceFileTypeTreeNode deviceFileTypeNode = (DeviceFileTypeTreeNode) node;
             LibraryMediator.instance().updateTableFiles(deviceFileTypeNode.getDevice(), deviceFileTypeNode.getFileType());
-            
+
             if (deviceFileTypeNode.getDevice().isLocal()) {
                 searchPrompt = I18n.tr("Search your") + " " + node.getUserObject();
             } else {
                 searchPrompt = I18n.tr("Search") + " " + deviceFileTypeNode.getDevice().getName() + I18n.tr("'s ") + deviceFileTypeNode.getUserObject();
             }
-            
+
         } else {
             LibraryMediator.instance().clearLibraryTable();
         }
-        
+
         if (node instanceof DeviceNode || node instanceof DevicesNode) {
             searchPrompt = "";
         }
@@ -195,7 +195,7 @@ public class LibraryExplorer extends AbstractLibraryListPanel {
             BackgroundExecutorService.schedule(new SearchByMediaTypeRunnable(mtsfdh));
 
         }
-        
+
         if (searchPrompt == null) {
             searchPrompt = I18n.tr("Search your") + " " + node.getUserObject();
         }
@@ -246,7 +246,10 @@ public class LibraryExplorer extends AbstractLibraryListPanel {
         SkinPopupMenu popup = new SkinPopupMenu();
         popup.add(new SkinMenuItem(refreshAction));
         popup.add(new SkinMenuItem(exploreAction));
-        popup.add(new SkinMenuItem(new ConfigureOptionsAction(OptionsConstructor.SHARED_KEY, I18n.tr("Configure Options"), I18n.tr("You can configure the FrostWire\'s Options."))));
+        popup.add(new SkinMenuItem(new ConfigureOptionsAction(OptionsConstructor.SHARED_KEY,
+                                                              I18n.tr("Configure Options"),
+                                                              I18n.tr("You can configure the FrostWire\'s Options."),
+                                                              "LIBRARY_SHARING_OPTIONS")));
         tree.addMouseListener(new DefaultMouseListener(new TreeMouseObserver(tree, popup)));
 
         tree.addKeyListener(new KeyAdapter() {
@@ -670,7 +673,7 @@ public class LibraryExplorer extends AbstractLibraryListPanel {
     private class RefreshAction extends AbstractAction {
 
         /**
-         * 
+         *
          */
         private static final long serialVersionUID = 412879927060208864L;
 
