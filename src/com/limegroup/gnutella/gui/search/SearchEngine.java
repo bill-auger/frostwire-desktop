@@ -60,7 +60,6 @@ public abstract class SearchEngine {
     private final BooleanSetting _setting;
     private final DomainAliasManager _domainAliasManager;
 
-    public static final int CLEARBITS_ID = 0;
     public static final int MININOVA_ID = 1;
     public static final int KAT_ID = 8;
     public static final int EXTRATORRENT_ID = 4;
@@ -86,10 +85,10 @@ public abstract class SearchEngine {
         }
     };
 
-    public static final SearchEngine KAT = new SearchEngine(KAT_ID, "KAT", SearchEnginesSettings.KAT_SEARCH_ENABLED, DOMAIN_ALIAS_MANAGER_BROKER.getDomainAliasManager("kickass.to")) {
+    public static final SearchEngine KAT = new SearchEngine(KAT_ID, "KAT", SearchEnginesSettings.KAT_SEARCH_ENABLED, DOMAIN_ALIAS_MANAGER_BROKER.getDomainAliasManager("kickass.so")) {
         @Override
         public SearchPerformer getPerformer(long token, String keywords) {
-            DomainAliasManager m = DOMAIN_ALIAS_MANAGER_BROKER.getDomainAliasManager("kickass.to");
+            DomainAliasManager m = DOMAIN_ALIAS_MANAGER_BROKER.getDomainAliasManager("kickass.so");
             return new KATSearchPerformer(m, token, keywords, DEFAULT_TIMEOUT);
         }
     };
@@ -226,7 +225,7 @@ public abstract class SearchEngine {
     }
 
     public static List<SearchEngine> getEngines() {
-        return Arrays.asList(TORRENTS, EXTRATORRENT, BITSNOOP, SOUNDCLOUD, YOUTUBE, FROSTCLICK, MININOVA, KAT, TPB, MONOVA, ARCHIVEORG, TORLOCK, EZTV, YIFY);
+        return Arrays.asList(YOUTUBE, EXTRATORRENT, TPB, BITSNOOP, TORRENTS, SOUNDCLOUD, FROSTCLICK, MININOVA, KAT, MONOVA, ARCHIVEORG, TORLOCK, EZTV, YIFY);
     }
 
     public abstract SearchPerformer getPerformer(long token, String keywords);

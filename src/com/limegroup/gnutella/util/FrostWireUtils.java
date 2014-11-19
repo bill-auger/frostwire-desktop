@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
+import com.frostwire.util.ByteUtils;
 import org.apache.commons.io.IOUtils;
 import org.limewire.setting.SettingsFactory;
 import org.limewire.util.CommonUtils;
@@ -42,10 +43,10 @@ public final class FrostWireUtils {
 	/** 
 	 * Constant for the current version of FrostWire.
 	 */
-	private static final String FROSTWIRE_VERSION = "6.0.0";
+	private static final String FROSTWIRE_VERSION = "6.0.1";
 	
 	/** Build number for the current version, gets reset to 1 on every version bump*/
-	private static final int BUILD_NUMBER = 8;
+	private static final int BUILD_NUMBER = 2;
 
 	/**
 	 * Make sure the constructor can never be called.
@@ -73,7 +74,7 @@ public final class FrostWireUtils {
             url += "?";
         else
             url += "&";
-        url += "guid=" + EncodingUtils.encode(new GUID(myClientGUID).toHexString())+ 
+        url += "guid=" + EncodingUtils.encode(ByteUtils.encodeHex(myClientGUID))+
             "&lang=" + EncodingUtils.encode(ApplicationSettings.getLanguage()) +
             "&lv="   + EncodingUtils.encode(FrostWireUtils.getFrostWireVersion()) +
             "&jv="   + EncodingUtils.encode(VersionUtils.getJavaVersion()) +
