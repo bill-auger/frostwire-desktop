@@ -35,6 +35,7 @@ import com.frostwire.search.frostclick.UserAgent;
 import com.frostwire.search.kat.KATSearchPerformer;
 import com.frostwire.search.mininova.MininovaSearchPerformer;
 import com.frostwire.search.monova.MonovaSearchPerformer;
+import com.frostwire.search.btdigg.BtdiggSearchPerformer;
 import com.frostwire.search.soundcloud.SoundcloudSearchPerformer;
 import com.frostwire.search.tbp.TPBSearchPerformer;
 import com.frostwire.search.torlock.TorLockSearchPerformer;
@@ -74,7 +75,8 @@ public abstract class SearchEngine {
     public static final int EZTV_ID = 15;
     public static final int TORRENTS_ID = 16;
     public static final int YIFI_ID = 17;
-    
+    public static final int BTDIGG_ID = 18;
+
     public static final DomainAliasManagerBroker DOMAIN_ALIAS_MANAGER_BROKER = new DomainAliasManagerBroker();
 
     public static final SearchEngine MININOVA = new SearchEngine(MININOVA_ID, "Mininova", SearchEnginesSettings.MININOVA_SEARCH_ENABLED, DOMAIN_ALIAS_MANAGER_BROKER.getDomainAliasManager("www.mininova.org")) {
@@ -182,7 +184,7 @@ public abstract class SearchEngine {
             return new TorrentsfmSearchPerformer(m, token, keywords, DEFAULT_TIMEOUT);
         }
     };
-    
+
     public static final SearchEngine YIFY = new SearchEngine(YIFI_ID, "Yify", SearchEnginesSettings.YIFY_SEARCH_ENABLED, DOMAIN_ALIAS_MANAGER_BROKER.getDomainAliasManager("www.yify-torrent.org")) {
         @Override
         public SearchPerformer getPerformer(long token, String keywords) {
@@ -191,7 +193,19 @@ public abstract class SearchEngine {
         }
     };
 
-    
+    public static final SearchEngine BTDIGG = new SearchEngine(BTDIGG_ID, "BtDigg", SearchEnginesSettings.BTDIGG_SEARCH_ENABLED, DOMAIN_ALIAS_MANAGER_BROKER.getDomainAliasManager("api.btdigg.org")) {
+        @Override
+        public SearchPerformer getPerformer(long token, String keywords) {
+            DomainAliasManager m = DOMAIN_ALIAS_MANAGER_BROKER.getDomainAliasManager("api.btdigg.org");
+            return new BtdiggSearchPerformer(m, token, keywords, DEFAULT_TIMEOUT);
+        }
+    };
+
+    public static final List<SearchEngine> SEARCH_ENGINES = Arrays.asList(
+            YOUTUBE, EXTRATORRENT, TPB, BITSNOOP, TORRENTS, SOUNDCLOUD, FROSTCLICK,
+            MININOVA, KAT, MONOVA, ARCHIVEORG, TORLOCK, EZTV, YIFY, BTDIGG);
+
+
     private SearchEngine(int id, String name, BooleanSetting setting, DomainAliasManager domainAliasManager) {
         _id = id;
         _name = name;
@@ -210,7 +224,7 @@ public abstract class SearchEngine {
     public String getName() {
         return _name;
     }
-    
+
     public String getDefaultDomain() {
         return _domainAliasManager.getDefaultDomain();
     }
@@ -225,7 +239,7 @@ public abstract class SearchEngine {
     }
 
     public static List<SearchEngine> getEngines() {
-        return Arrays.asList(YOUTUBE, EXTRATORRENT, TPB, BITSNOOP, TORRENTS, SOUNDCLOUD, FROSTCLICK, MININOVA, KAT, MONOVA, ARCHIVEORG, TORLOCK, EZTV, YIFY);
+        return SEARCH_ENGINES;
     }
 
     public abstract SearchPerformer getPerformer(long token, String keywords);
@@ -241,7 +255,7 @@ public abstract class SearchEngine {
 
         return null;
     }
-    
+
     /**
      * Used in Domain Alias Manifest QA test, don't delete.
      */

@@ -118,7 +118,7 @@ public final class SearchMediator {
     }
 
     /**
-     * Constructs the UI components of the search result display area of the 
+     * Constructs the UI components of the search result display area of the
      * search tab.
      */
     private SearchMediator() {
@@ -156,7 +156,7 @@ public final class SearchMediator {
         GUIMediator.instance().getMainFrame().getApplicationHeader().requestSearchFocus();
     }
 
-    /** 
+    /**
      * Repeats the given search.
      */
     void repeatSearch(SearchResultMediator rp, SearchInformation info) {
@@ -188,13 +188,13 @@ public final class SearchMediator {
 
         long token = newSearchToken();
         SearchResultMediator resultTab = addResultTab(token, info);
-        
+
         performSearch(token, info.getQuery());
 
         if (info.getTitle().startsWith("youtube:")) {
             resultTab.selectSchemaBoxByMediaType(NamedMediaType.getFromMediaType(MediaType.getVideoMediaType()));
         }
-        
+
         return token;
     }
 
@@ -493,7 +493,7 @@ public final class SearchMediator {
 
     /**
      * Returns the <tt>ResultPanel</tt> for the specified GUID.
-     * 
+     *
      * @param rguid the guid to search for
      * @return the <tt>ResultPanel</tt> that matches the GUID, or null
      *  if none match.
@@ -537,6 +537,9 @@ public final class SearchMediator {
 
         @Override
         public void onResults(SearchPerformer performer, List<? extends SearchResult> results) {
+
+System.out.println("ManagerListener::onResults() nResults" + results.size());
+
             if (!performer.isStopped()) {
                 //System.out.println("Received results: " + performer.getToken() + " \t- " + results.size());
 
