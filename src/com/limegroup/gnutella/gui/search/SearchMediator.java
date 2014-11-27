@@ -362,6 +362,9 @@ public final class SearchMediator {
     private static void updateSearchIcon(final long token, final boolean active) {
         GUIMediator.safeInvokeAndWait(new Runnable() {
             public void run() {
+
+System.out.println("SearchMediator::updateSearchIcon()");
+
                 SearchResultMediator trp = getResultPanelForGUID(token);
                 if (trp != null) {
                     trp.updateSearchIcon(active);
@@ -372,28 +375,42 @@ public final class SearchMediator {
 
     private static List<UISearchResult> convertResults(List<? extends SearchResult> results, SearchEngine engine, String query) {
 
-        List<UISearchResult> result = new ArrayList<UISearchResult>();
+System.out.println("SearchMediator::convertResults()  IN nResults=" + results.size());
+
+        List<UISearchResult> uiResults = new ArrayList<UISearchResult>();
 
         for (SearchResult sr : results) {
-
             UISearchResult ui = null;
+
+System.out.println("SearchMediator::convertResults() MID isTorrent displayName=" + ((TorrentSearchResult)sr).getDisplayName() + " sr.class=" + sr.getClass().getName());
 
             if (sr instanceof YouTubeCrawledSearchResult) {
                 ui = new YouTubeUISearchResult((YouTubeCrawledSearchResult) sr, engine, query);
             } else if (sr instanceof SoundcloudSearchResult) {
                 ui = new SoundcloudUISearchResult((SoundcloudSearchResult) sr, engine, query);
             } else if (sr instanceof TorrentSearchResult) {
+
+System.out.println("SearchMediator::convertResults() MID isTorrent filename=" + ((TorrentSearchResult)sr).getFilename());
+
                 ui = new TorrentUISearchResult((TorrentSearchResult) sr, engine, query);
             } else if (sr instanceof ArchiveorgCrawledSearchResult) {
                 ui = new ArchiveorgUISearchResult((ArchiveorgCrawledSearchResult) sr, engine, query);
             }
 
+else System.out.println("SearchMediator::convertResults() MID sr.class=NFG");
+System.out.println("SearchMediator::convertResults() MID (ui != null)=" + (ui != null));
+
             if (ui != null) {
-                result.add(ui);
+
+System.out.println("SearchMediator::convertResults() MID add filename=" + ui.getFilename());
+
+                uiResults.add(ui);
             }
         }
 
-        return result;
+System.out.println("SearchMediator::convertResults() OUT nResults=" + uiResults.size());
+
+        return uiResults;
     }
 
     /**
@@ -528,6 +545,8 @@ public final class SearchMediator {
     }
 
     private void onFinished(long token) {
+System.out.println("SearchMediator::onFinished()");
+
         SearchResultMediator rp = getResultPanelForGUID(token);
         updateSearchIcon(token, false);
         rp.setToken(0); // to identify that the search is stopped (needs refactor)
@@ -538,7 +557,7 @@ public final class SearchMediator {
         @Override
         public void onResults(SearchPerformer performer, List<? extends SearchResult> results) {
 
-System.out.println("ManagerListener::onResults() nResults" + results.size());
+System.out.println("ManagerListener::onResults() nResults" + results.size() + " token=" + performer.getToken());
 
             if (!performer.isStopped()) {
                 //System.out.println("Received results: " + performer.getToken() + " \t- " + results.size());
@@ -558,21 +577,25 @@ System.out.println("ManagerListener::onResults() nResults" + results.size());
                         }
 
                         final List<UISearchResult> uiResults = convertResults(filtered, se, rp.getQuery());
-
                         GUIMediator.safeInvokeAndWait(new Runnable() {
                             public void run() {
+
+System.out.println("ManagerListener::onResults() run()  IN nResults=" + uiResults.size());
                                 try {
                                     SearchFilter filter = getSearchFilterFactory().createFilter();
                                     for (UISearchResult sr : uiResults) {
                                         if (filter.allow(sr)) {
+
+System.out.println("ManagerListener::onResults() run() MID addQueryResult");
+
                                             getSearchResultDisplayer().addQueryResult(token, sr, rp);
                                         }
                                     }
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
+System.out.println("ManagerListener::onResults() run() OUT");
                             }
-
                         });
                     }
                 }
@@ -581,6 +604,9 @@ System.out.println("ManagerListener::onResults() nResults" + results.size());
 
         @Override
         public void onFinished(long token) {
+
+System.out.println("ManagerListener::onFinished()");
+
             //System.out.println("Finished: " + token);
             SearchMediator.this.onFinished(token);
         }

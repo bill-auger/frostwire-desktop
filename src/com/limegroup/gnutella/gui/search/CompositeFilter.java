@@ -28,7 +28,7 @@ class CompositeFilter implements TableLineFilter<SearchResultDataLine> {
      * The underlying filters.
      */
     private List<TableLineFilter<SearchResultDataLine>> delegates;
-    
+
     /**
      * Creates a new CompositeFilter of the specified depth.
      * By default, all the filters are an AllowFilter.
@@ -40,7 +40,7 @@ class CompositeFilter implements TableLineFilter<SearchResultDataLine> {
         }
         reset();
     }
-    
+
     /**
      * Resets this filter to all AllowFilters.
      */
@@ -49,23 +49,32 @@ class CompositeFilter implements TableLineFilter<SearchResultDataLine> {
             delegates.set(i, AllowFilter.instance());
         }
     }
-    
+
     /**
      * Determines whether or not the specified TableLine
      * can be displayed.
      */
     public boolean allow(SearchResultDataLine line) {
+
+System.out.println("CompositeFilter::allow() nDelegates=" + delegates.size());
+
         for (int i=0; i<delegates.size(); i++) {
             if (! delegates.get(i).allow(line))
                 return false;
         }
         return true;
     }
-    
+
     /**
      * Sets the filter at the specified depth.
      */
     boolean setFilter(int depth, TableLineFilter<SearchResultDataLine> filter) {
+
+System.out.println("CompositeFilter::setFilter()"                 +
+                   " filter.class=" + filter.getClass().getName() +
+                   " isSelf?="      + (filter == this)            +
+                   " exists?="      + (delegates.get(depth).equals(filter)));
+
         if (filter == this) {
             throw new IllegalArgumentException("Filter must not be composed of itself");
         }

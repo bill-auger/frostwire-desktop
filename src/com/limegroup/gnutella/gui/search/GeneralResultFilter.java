@@ -23,7 +23,7 @@ import com.limegroup.gnutella.gui.GUIUtils;
 import com.limegroup.gnutella.gui.LabeledTextField;
 
 /**
- * 
+ *
  * @author gubatron
  * @author aldenml
  *
@@ -133,6 +133,13 @@ public final class GeneralResultFilter implements TableLineFilter<SearchResultDa
 
         String sourceName = getSourceName(node);
         boolean hasKeywords = hasKeywords(node.getDisplayName() + " " + node.getExtension() + " " + sourceName);
+
+System.out.println("GeneralResultFilter::allow()"                                +
+                   " inSeedRange?=" + inSeedRange                                +
+                   " inSizeRange?=" + inSizeRange                                +
+                   " hasKeywords?=" + hasKeywords                                +
+                   " ret="          + (inSeedRange && inSizeRange && hasKeywords));
+
         return inSeedRange && inSizeRange && hasKeywords;
     }
 

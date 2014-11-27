@@ -134,6 +134,9 @@ public class LimeJTable extends JTable implements JSortTable {
      * See: http://developer.java.sun.com/developer/bugParade/bugs/4730055.html
      */
     public int getSelectedRow() {
+
+System.out.println("LimeJTable::getSelectedRow() row=" + super.getSelectedRow() + " nRows=" + dataModel.getRowCount() + " dataModel.class=" + dataModel.getClass().getName());
+
         int selected = super.getSelectedRow();
         if (selected >= dataModel.getRowCount())
             return -1;
@@ -197,6 +200,9 @@ public class LimeJTable extends JTable implements JSortTable {
      * Determines if the given row is visible.
      */
     public boolean isRowVisible(int row) {
+
+System.out.println("LimeJTable::isRowVisible() row=" + row);
+
         if (row != -1) {
             Rectangle cellRect = getCellRect(row, 0, false);
             Rectangle visibleRect = getVisibleRect();
@@ -342,7 +348,7 @@ public class LimeJTable extends JTable implements JSortTable {
                 getSelectionModel().addSelectionInterval(reselectIndex, reselectIndex);
             }
 
-            // deselect rows if 
+            // deselect rows if
             if (e.getID() == MouseEvent.MOUSE_CLICKED && SwingUtilities.isLeftMouseButton(e) && !e.isPopupTrigger()) {
 
                 TableModel model = getModel();
@@ -376,16 +382,16 @@ public class LimeJTable extends JTable implements JSortTable {
         int col = columnAtPoint(p);
 
         TableCellRenderer cellRenderer = getCellRenderer(row, col);
-        
+
         if (cellRenderer instanceof FWAbstractJPanelTableCellRenderer) {
             FWAbstractJPanelTableCellRenderer renderer = (FWAbstractJPanelTableCellRenderer) cellRenderer;
-            String tooltip = renderer.getToolTipText(e); 
+            String tooltip = renderer.getToolTipText(e);
             if (tooltip != null) {
                 this.tips = new String[] {tooltip};
                 return tooltip;
             }
         }
-        
+
         int colModel = convertColumnIndexToModel(col);
         DataLineModel<?, ?> dlm = (DataLineModel<?, ?>) dataModel;
         boolean isClippable = col > -1 && row > -1 ? dlm.isClippable(colModel) : false;
@@ -531,12 +537,12 @@ public class LimeJTable extends JTable implements JSortTable {
     }
 
     /**
-     * Returns the next list element that starts with 
+     * Returns the next list element that starts with
      * a prefix.
      *
      * @param prefix the string to test for a match
      * @param startIndex the index for starting the search
-     * @param bias the search direction, either 
+     * @param bias the search direction, either
      * Position.Bias.Forward or Position.Bias.Backward.
      * @return the index of the next list element that
      * starts with the prefix; otherwise -1

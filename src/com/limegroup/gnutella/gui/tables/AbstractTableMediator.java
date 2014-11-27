@@ -160,9 +160,9 @@ public abstract class AbstractTableMediator<T extends DataLineModel<E, I>, E ext
     private static TableCellRenderer ICON_AND_NAME_RENDERER;
 
     private static TableCellRenderer ACTION_ICON_AND_NAME_RENDERER;
-    
+
     private static SourceRenderer SOURCE_RENDERER;
-    
+
     private static SearchResultActionsRenderer SEARCH_RESULT_ACTIONS_RENDERER;
 
     /**
@@ -177,10 +177,10 @@ public abstract class AbstractTableMediator<T extends DataLineModel<E, I>, E ext
 
     /** Variable for the date renderer. */
     private static TableCellRenderer DATE_RENDERER;
-    
-    
+
+
     private static NameHolderRenderer NAME_HOLDER_RENDERER;
-    
+
     /**
      * A zero dimension to be used in all tables.
      */
@@ -203,7 +203,7 @@ public abstract class AbstractTableMediator<T extends DataLineModel<E, I>, E ext
     protected JScrollPane SCROLL_PANE;
 
     /**
-     * Is true when the table is currently resorted. Should only be used by 
+     * Is true when the table is currently resorted. Should only be used by
      * package internal event listeners, which want to suppress events during
      * resorting.
      */
@@ -398,7 +398,7 @@ public abstract class AbstractTableMediator<T extends DataLineModel<E, I>, E ext
         TABLE.setDefaultRenderer(SpeedRenderer.class, getSpeedRenderer());
         TABLE.setDefaultRenderer(Date.class, getDateRenderer());
         TABLE.setDefaultRenderer(NameHolder.class, getNameHolderRenderer());
-        
+
         if (getAbstractActionsRenderer() != null) {
             TABLE.setDefaultRenderer(AbstractActionsHolder.class, getAbstractActionsRenderer());
         }
@@ -411,11 +411,11 @@ public abstract class AbstractTableMediator<T extends DataLineModel<E, I>, E ext
     /**
      * Intended for setting up default editors.  By default,
      * no editors are added.
-     * 
+     *
      * Important: Make sure to NOT REUSE Renderers used for non-editable cells.
      * It's necessary for editors to have their own Renderer instance, otherwise
      * you might get issues painting on editable cells. -gubatron
-     * 
+     *
      */
     protected void setDefaultEditors() {
     }
@@ -469,14 +469,14 @@ public abstract class AbstractTableMediator<T extends DataLineModel<E, I>, E ext
         tablePane.setLayout(new BoxLayout(tablePane, BoxLayout.Y_AXIS));
 
         SCROLL_PANE = new JScrollPane(TABLE);
-        
+
         tablePane.add(SCROLL_PANE);
 
         TABLE_PANE = tablePane;
 
         return tablePane;
     }
-    
+
     public T getDataModel() {
         return DATA_MODEL;
     }
@@ -494,7 +494,7 @@ public abstract class AbstractTableMediator<T extends DataLineModel<E, I>, E ext
      * Adds a new DataLine initialized by Object o to the list at
      * index i. If the list is sorted or the insert is beyond the list bounds
      * the add falls back to the default add(Object o)
-     * 
+     *
      * @param o - object to add
      * @param index - index to insert into if the list is not sorted
      */
@@ -503,8 +503,6 @@ public abstract class AbstractTableMediator<T extends DataLineModel<E, I>, E ext
             CellEditor editor = TABLE.getCellEditor();
             editor.cancelCellEditing();
         }
-
-        boolean inView = TABLE.isSelectionVisible();
 
         int addedAt;
         if (SETTINGS.REAL_TIME_SORT.getValue() && DATA_MODEL.isSorted())
@@ -517,8 +515,10 @@ public abstract class AbstractTableMediator<T extends DataLineModel<E, I>, E ext
             }
         }
 
+System.out.println("AbstractTableMediator::add() isSelectionVisible?=" + TABLE.isSelectionVisible());
+
         // if it was added...
-        fixSelection(addedAt, inView);
+        fixSelection(addedAt, TABLE.isSelectionVisible());
     }
 
     /**
@@ -575,7 +575,7 @@ public abstract class AbstractTableMediator<T extends DataLineModel<E, I>, E ext
     }
 
     /**
-     * Moves a row in the table to a new location. 
+     * Moves a row in the table to a new location.
      * @param oldLocation - table row to move
      * @param newLocation - location to insert the table row after it had been removed
      */
@@ -653,7 +653,7 @@ public abstract class AbstractTableMediator<T extends DataLineModel<E, I>, E ext
     /**
      * Removes all selected rows from the list
      * and fires deletions through the dataModel
-     * 
+     *
      * Cancels any editing that may be occuring prior to updating the model, we
      * must do this since editing will be occuring on the row that will be
      * removed
@@ -932,7 +932,7 @@ public abstract class AbstractTableMediator<T extends DataLineModel<E, I>, E ext
     }
 
     /**
-     * Returns whether the table is resorting. 
+     * Returns whether the table is resorting.
      */
     boolean isResorting() {
         return isResorting;
@@ -979,21 +979,21 @@ public abstract class AbstractTableMediator<T extends DataLineModel<E, I>, E ext
         }
         return SOURCE_RENDERER;
     }
-    
+
     protected TableCellRenderer getActionIconAndNameRenderer() {
         if (ACTION_ICON_AND_NAME_RENDERER == null) {
             ACTION_ICON_AND_NAME_RENDERER = new ActionIconAndNameRenderer();
         }
         return ACTION_ICON_AND_NAME_RENDERER;
     }
-    
+
     protected TableCellRenderer getSearchResultsActionsRenderer() {
         if (SEARCH_RESULT_ACTIONS_RENDERER == null) {
             SEARCH_RESULT_ACTIONS_RENDERER = new SearchResultActionsRenderer();
         }
         return SEARCH_RESULT_ACTIONS_RENDERER;
     }
-    
+
     protected TableCellRenderer getDefaultRenderer() {
         if (DEFAULT_RENDERER == null) {
             DEFAULT_RENDERER = new DefaultTableBevelledCellRenderer();//new DefaultTableCellRenderer();
@@ -1014,7 +1014,7 @@ public abstract class AbstractTableMediator<T extends DataLineModel<E, I>, E ext
         }
         return DATE_RENDERER;
     }
-    
+
     private TableCellRenderer getNameHolderRenderer() {
         if (NAME_HOLDER_RENDERER == null) {
             NAME_HOLDER_RENDERER = new NameHolderRenderer();

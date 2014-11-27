@@ -20,6 +20,14 @@ class SearchEngineFilter implements TableLineFilter<SearchResultDataLine> {
         if (box != null) {
             result = node.getSearchEngine().isEnabled() && box.isEnabled() && box.isSelected();
         }
+
+System.out.println("SearchEngineFilter::allow()"                            +
+                   " box.null?="       + (box == null)                      +
+                   " node.isEnabled?=" + node.getSearchEngine().isEnabled() +
+                   " box.isEnabled?="  + (box != null && box.isEnabled())   +
+                   " box.isSelected?=" + (box != null && box.isSelected())  +
+                   " ret="             + result);
+
         return result;
     }
 }

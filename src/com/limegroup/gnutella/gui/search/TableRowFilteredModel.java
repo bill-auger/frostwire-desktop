@@ -31,7 +31,7 @@ import com.limegroup.gnutella.settings.SearchSettings;
 public class TableRowFilteredModel extends ResultPanelModel {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = -7810977044778830969L;
 
@@ -83,6 +83,11 @@ public class TableRowFilteredModel extends ResultPanelModel {
         boolean isNotJunk = junkFilter.allow(tl);
         boolean allow = allow(tl);
 
+System.out.println("TableRowFilteredModel::add()" +
+                   " isNotJunk?=" + isNotJunk     +
+                   " allow?="     + allow         +
+                   " hideJunk?="  + SearchSettings.hideJunk());
+
         if (isNotJunk || !SearchSettings.hideJunk()) {
             if (allow) {
                 return super.add(tl, row);
@@ -104,7 +109,7 @@ public class TableRowFilteredModel extends ResultPanelModel {
         HIDDEN.clear();
         super.simpleClear();
     }
-    
+
     @Override
     public void clear() {
         _numResults = 0;

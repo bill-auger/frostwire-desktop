@@ -21,7 +21,7 @@ package com.limegroup.gnutella.gui.search;
 import com.frostwire.gui.filters.TableLineFilter;
 
 /**
- * 
+ *
  * @author gubatron
  * @author aldenml
  *
@@ -49,6 +49,12 @@ final class MediaTypeFilter implements TableLineFilter<SearchResultDataLine> {
         } catch (Throwable e) {
             // ignore
         }
+
+NamedMediaType nodeType = node.getNamedMediaType();
+System.out.println("MediaTypeFilter::allow()"                                       +
+                   " nmt.name="  + nmt.getName()                                    +
+                   " node.name=" + ((nodeType == null)? "nil" : nodeType.getName()) +
+                   " ret="       + nmt.equals(node.getNamedMediaType()));
 
         return nmt.equals(node.getNamedMediaType());
     }

@@ -31,7 +31,7 @@ import com.limegroup.gnutella.settings.PlayerSettings;
 import com.limegroup.gnutella.settings.SearchSettings;
 
 /**
- * 
+ *
  * @author gubatron
  * @author aldenml
  *
@@ -44,6 +44,12 @@ public abstract class AbstractUISearchResult implements UISearchResult {
     private final String extension;
 
     public AbstractUISearchResult(FileSearchResult sr, SearchEngine se, String query) {
+
+System.out.println("AbstractUISearchResult::AbstractUISearchResult()" +
+                   " filename="  + sr.getFilename()                   +
+                   " sr.class="  + sr.getClass().getName()            +
+                   " extension=" + FilenameUtils.getExtension(sr.getFilename()));
+
         this.sr = sr;
         this.se = se;
         this.query = query;
@@ -121,7 +127,7 @@ public abstract class AbstractUISearchResult implements UISearchResult {
                 boolean isVideo = mediaType.equals(MediaType.getVideoMediaType());
                 if (isVideo) {
                     boolean videoPreviewInBrowser = !PlayerSettings.USE_FW_PLAYER_FOR_CLOUD_VIDEO_PREVIEWS.getValue() && sr instanceof YouTubeCrawledStreamableSearchResult;
-                    
+
                     if (videoPreviewInBrowser) {
                         GUIMediator.instance().launchYouTubePreviewInBrowser(((YouTubeCrawledStreamableSearchResult) sr));
                     } else {

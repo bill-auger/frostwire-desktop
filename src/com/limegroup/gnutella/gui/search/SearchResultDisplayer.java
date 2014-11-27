@@ -66,11 +66,11 @@ public final class SearchResultDisplayer implements RefreshListener {
      */
     private SearchTabbedPane tabbedPane;
 
-    /** The contents of tabbedPane. 
-     *  INVARIANT: entries.size()==# of tabs in tabbedPane 
-     *  LOCKING: +obtain entries' monitor before adjusting number of 
+    /** The contents of tabbedPane.
+     *  INVARIANT: entries.size()==# of tabs in tabbedPane
+     *  LOCKING: +obtain entries' monitor before adjusting number of
      *            outstanding searches, i.e., the number of tabs
-     *           +obtain a ResultPanel's monitor before adding or removing 
+     *           +obtain a ResultPanel's monitor before adding or removing
      *            results + to prevent deadlock, never obtain ResultPanel's
      *            lock if holding entries'.
      */
@@ -95,7 +95,7 @@ public final class SearchResultDisplayer implements RefreshListener {
      */
     private SearchResultMediator DUMMY; // FTA: final removed
 
-    /** 
+    /**
      * Container for the DUMMY ResultPanel. I'm keeping a reference to this
      * object so that I can refresh the image that it contains.
      */
@@ -127,7 +127,7 @@ public final class SearchResultDisplayer implements RefreshListener {
         results = new JPanel();
 
         // make the results panel take up as much space as possible
-        // for when the window is resized. 
+        // for when the window is resized.
         results.setPreferredSize(new Dimension(10000, 10000));
         results.setLayout(switcher);
         //results.setBackground(Color.WHITE);
@@ -167,7 +167,7 @@ public final class SearchResultDisplayer implements RefreshListener {
 
         CancelSearchIconProxy.updateTheme();
     }
-    
+
     public void switchToTabByOffset(int offset) {
         if (tabbedPane != null) {
             tabbedPane.switchToTabByOffset(offset);
@@ -198,10 +198,10 @@ public final class SearchResultDisplayer implements RefreshListener {
             entries.get(i).refresh();
     }
 
-    /** 
+    /**
      * @modifies tabbed pane, entries
      * @effects adds an entry for a search for stext with GUID guid
-     *  to the tabbed pane.  This is used both for normal searching 
+     *  to the tabbed pane.  This is used both for normal searching
      *  and browsing.  Returns the ResultPanel added.
      */
     SearchResultMediator addResultTab(long token, List<String> searchTokens, SearchInformation info) {
@@ -233,7 +233,7 @@ public final class SearchResultDisplayer implements RefreshListener {
     /**
      * Create a new JTabbedPane and add the necessary
      * listeners.
-     * 
+     *
      */
     private void setupTabbedPane() {
         removeTabbedPaneListeners();
@@ -250,7 +250,7 @@ public final class SearchResultDisplayer implements RefreshListener {
      * titles from the current tabbed pane, create a new
      * tabbed pane and add all of the components and titles
      * back in.
-     * 
+     *
      */
     private void resetTabbedPane() {
         ArrayList<SearchResultMediator> ents = new ArrayList<SearchResultMediator>();
@@ -275,6 +275,9 @@ public final class SearchResultDisplayer implements RefreshListener {
     }
 
     private SearchResultMediator addResultPanelInternal(SearchResultMediator panel, String title) {
+
+System.out.println("SearchResultDisplayer::addResultPanelInternal()   IN title=" + title);
+
         entries.add(panel);
 
         // XXX: LWC-1214 (hack)
@@ -287,6 +290,8 @@ public final class SearchResultDisplayer implements RefreshListener {
             tabbedPane.addTab(title, CancelSearchIconProxy.createSelected(), panel.getComponent());
         }
 
+System.out.println("SearchResultDisplayer::addResultPanelInternal() MID1 title=" + title);
+
         // XXX: LWC-1088 (hack)
         try {
             tabbedPane.setSelectedIndex(entries.size() - 1);
@@ -298,7 +303,7 @@ public final class SearchResultDisplayer implements RefreshListener {
             tabbedPane.setSelectedIndex(entries.size() - 1);
 
             // This will happen under OS X in apple.laf.CUIAquaTabbedPaneTabState.getIndex().
-            // we grab all of the components from the current 
+            // we grab all of the components from the current
             // tabbed pane, create a new tabbed pane, and dump
             // the components back into it.
             //
@@ -306,11 +311,15 @@ public final class SearchResultDisplayer implements RefreshListener {
             // https://www.limewire.org/jira/browse/LWC-1088
         }
 
+System.out.println("SearchResultDisplayer::addResultPanelInternal() MID2 title=" + title);
+
         try {
             tabbedPane.setProgressActiveAt(entries.size() - 1, true);
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+System.out.println("SearchResultDisplayer::addResultPanelInternal() MID3 title=" + title);
 
         //Make sure Parallel searches are not beyond the maximum to avoid CPU from burning
         if (SearchSettings.PARALLEL_SEARCH.getValue() > SearchSettings.MAXIMUM_PARALLEL_SEARCH) {
@@ -326,8 +335,10 @@ public final class SearchResultDisplayer implements RefreshListener {
         switcher.last(results); //show tabbed results
 
         // If there are lots of tabs, this ensures everything
-        // is properly visible. 
+        // is properly visible.
         MAIN_PANEL.revalidate();
+
+System.out.println("SearchResultDisplayer::addResultPanelInternal()  OUT title=" + title + " searchGuid=" + panel.getToken());
 
         return panel;
     }
@@ -336,19 +347,23 @@ public final class SearchResultDisplayer implements RefreshListener {
      * If i rp is no longer the i'th panel of this, returns silently. Otherwise
      * adds line to rp under the given group. Updates the count on the tab in
      * this and restarts the spinning lime.
-     * 
+     *
      * @requires this is called from Swing thread, group is null or similar to
      *           line and already in rp
      * @modifies this
      */
     void addQueryResult(long token, UISearchResult line, SearchResultMediator rp) {
+System.out.println("SearchResultDisplayer::addQueryResult()   IN query=" + rp.getQuery() + " searchGuid=" + token);
         if (rp.isStopped()) {
             return;
         }
+System.out.println("SearchResultDisplayer::addQueryResult() MID1 query=" + rp.getQuery() + " searchGuid=" + token);
 
         //Actually add the line.   Must obtain rp's monitor first.
         if (!rp.matches(token))//GUID of rp!=replyGuid
             throw new IllegalArgumentException("guids don't match");
+
+System.out.println("SearchResultDisplayer::addQueryResult() MID2 query=" + rp.getQuery() + " searchGuid=" + token);
 
         rp.add(line);
 
@@ -363,6 +378,8 @@ public final class SearchResultDisplayer implements RefreshListener {
         //Update index on tab.  Don't forget to add 1 since line hasn't
         //actually been added!
         tabbedPane.setTitleAt(resultPanelIndex, titleOf(rp));
+
+System.out.println("SearchResultDisplayer::addQueryResult()  OUT query=" + rp.getQuery() + " searchGuid=" + token);
     }
 
     void updateSearchIcon(SearchResultMediator rp, boolean active) {
@@ -570,7 +587,7 @@ public final class SearchResultDisplayer implements RefreshListener {
      */
     private String titleOf(SearchResultMediator rp) {
         int total = rp.totalResults();
-        
+
         String title = rp.getTitle();
         if (title.length() > 40) {
             title = title.substring(0,39) + "...";

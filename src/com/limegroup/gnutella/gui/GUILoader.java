@@ -29,15 +29,15 @@ import org.limewire.util.VersionUtils;
 import com.limegroup.gnutella.gui.bugs.FatalBugManager;
 import com.limegroup.gnutella.util.FrostWireUtils;
 
-
+//import com.limegroup.gnutella.gui.search.ApiSearchTests;
 /**
  * This class constructs an <tt>Initializer</tt> instance that constructs
  * all of the necessary classes for the application.
  */
 public class GUILoader {
-	
-	/** 
-	 * Creates an <tt>Initializer</tt> instance that constructs the 
+
+	/**
+	 * Creates an <tt>Initializer</tt> instance that constructs the
 	 * necessary classes for the application.
 	 *
 	 * <p>Invoked by com.limegroup.gnutella.gui.Main by reflection.
@@ -64,11 +64,13 @@ public class GUILoader {
                     t.initCause(err);
                     error = t;
                 } catch(Throwable ignored) {}
-                //System.out.println(t);       
+                //System.out.println(t);
                 showCorruptionError(error);
                 System.exit(1);
             }
         }
+
+//ApiSearchTests.main(args) ; //System.exit(0);
 	}
 
     private static void hideSplash(Frame frame) {
@@ -79,16 +81,16 @@ public class GUILoader {
             SplashWindow.instance().setVisible(false);
         } catch(Throwable ignored) {}
     }
-	
+
 	/**
 	 * Display a standardly formatted internal error message
 	 * coming from the backend.
 	 *
 	 * @param message the message to display to the user
 	 *
-	 * @param err the <tt>Throwable</tt> object containing information 
+	 * @param err the <tt>Throwable</tt> object containing information
 	 *  about the error
-	 */	
+	 */
 	private static final void showCorruptionError(Throwable err) {
 		err.printStackTrace();
 		StringWriter sw = new StringWriter();
@@ -107,14 +109,14 @@ public class GUILoader {
 		pw.println("Free/total memory: "
 				   +runtime.freeMemory()+"/"+runtime.totalMemory());
 		pw.println();
-		
+
         err.printStackTrace(pw);
-        
+
         pw.println();
-        
+
         pw.println("STARTUP ERROR!");
         pw.println();
-        
+
 		File propsFile = new File(getUserSettingsDir(), "frostwire.props");
 		Properties props = new Properties();
 		try {
@@ -126,12 +128,12 @@ public class GUILoader {
 		} catch(FileNotFoundException fnfe) {
 		} catch(IOException ioe) {
 		}
-		
+
 		pw.flush();
-		
+
         displayError(sw.toString());
 	}
-	
+
 	/**
 	 * Gets the settings directory without using CommonUtils.
 	 */
@@ -143,7 +145,7 @@ public class GUILoader {
         else
             return new File(dir, ".frostwire");
     }
-        
+
 	/**
 	 * Displays an internal error with specialized formatting.
 	 */
@@ -166,7 +168,7 @@ public class GUILoader {
 		String instr3;
 		String instr4;
 		String instr5;
-        
+
         instr0 = "One or more necessary files appear to be invalid.";
         instr1 = "This is generally caused by a corrupted installation.";
         instr2 = "Please try downloading and installing FrostWire again.";
@@ -180,7 +182,7 @@ public class GUILoader {
 		JLabel label3 = new JLabel(instr3);
 		JLabel label4 = new JLabel(instr4);
 		JLabel label5 = new JLabel(instr5);
-		
+
 		JPanel labelPanel = new JPanel();
 		JPanel innerLabelPanel = new JPanel();
 		labelPanel.setLayout(new BoxLayout(labelPanel, BoxLayout.X_AXIS));
@@ -228,7 +230,7 @@ public class GUILoader {
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
 
         DIALOG.getContentPane().add(mainPanel);
-        DIALOG.pack();        
+        DIALOG.pack();
 
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		Dimension dialogSize = DIALOG.getSize();
